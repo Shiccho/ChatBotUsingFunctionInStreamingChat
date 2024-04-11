@@ -152,4 +152,4 @@ cython_debug/
 #.idea/
 
 # .env file
-configs/env/.env
+!configs/env/.env.example
