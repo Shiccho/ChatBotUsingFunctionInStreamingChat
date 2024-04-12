@@ -1,4 +1,5 @@
 # Sample Function from OpenAI API Documentation: https://platform.openai.com/docs/guides/function-calling
+# tools.json is also from OpenAI API Documentation: https://platform.openai.com/docs/guides/function-calling
 
 def get_current_weather(location, unit="fahrenheit"):
     import json
