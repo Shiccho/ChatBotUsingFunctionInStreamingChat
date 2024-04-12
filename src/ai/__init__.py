@@ -1,5 +1,4 @@
-
-# Chatbot Using Function with Chat Streaming 
+# Chatbot Using Function with Chat Streaming, Sample Code of Chat AI
 # Copyright (C) 2024  Yuki Matsutani
 
 # This program is free software: you can redistribute it and/or modify
