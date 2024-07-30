@@ -44,14 +44,14 @@ class Functions(BaseModel):
         availables = {}
         for file in Path(implementation_directory_path).glob("*.py"):
             module_name = file.stem
-            if module_name in function_names:
-                spec = importlib.util.spec_from_file_location(module_name, file)
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
-                # Add functions to `functions` by `module_name`
-                for attr_name in function_names:
-                    if attr_name in function_names and callable(getattr(module, attr_name)):
-                        availables[attr_name] = getattr(module, attr_name)
+            spec = importlib.util.spec_from_file_location(module_name, file)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            # Add functions to `availables` if Function Name is in `function_names`
+            for function_name in function_names:
+                if callable(getattr(module, function_name, None)):
+                    availables[function_name] = getattr(module, function_name)
         return cls.model_validate({"availables": availables})
     
     def get(self, function_name: str):

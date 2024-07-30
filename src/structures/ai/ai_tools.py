@@ -19,19 +19,15 @@ from typing import List, Dict, Literal, Optional, Union
 from os import PathLike
 import json
 
-class ParameterProperties(BaseModel):
-    location: Dict
-    unit: Dict
-
 class Parameters(BaseModel):
-    type: Literal["object"]
-    properties: ParameterProperties
-    required: List[str]
+    type: Optional[Literal["object"]] = None
+    properties: Optional[dict[str, dict[str, str|dict[str, str]|list[str]]]] = None
+    required: Optional[list[str]] = None
 
 class Function(BaseModel):
     name: str
     description: str
-    parameters: Optional[Parameters]
+    parameters: Optional[Parameters] = None
 
 class ToolFunction(BaseModel):
     type: Literal["function"]

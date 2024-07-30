@@ -40,9 +40,15 @@ async def main(args) -> int:
     # License Notification
     print(license_notification)
 
+    with open("configs/ai/system_prompt.md", "r", encoding="utf-8") as f:
+        system_prompt = f.read()
+        if len(system_prompt) == 0:
+            system_prompt = None
+
     # Initialize AI
     ai = ChatAI(
-        model=Model.GPT4,
+        model=Model.GPT4o,
+        system_prompt=system_prompt,
         tools_setting_file = 'configs/tools/settings/tools.json',
         tools_implementation_directory = 'configs/tools/implementation'
     )
@@ -53,6 +59,7 @@ async def main(args) -> int:
         text = input("You: ")
         if text == "exit":
             break
+        print("AI: ", end='')
         reply = await ai.chat(text)
         logger.info(f"AI: {reply}")
     return 0

@@ -24,7 +24,7 @@ from .chat_completion_tool_call import ToolCall
 
 @dataclass
 class Message():
-    content: Optional[str] = None
+    content: Optional[str|list[dict[str, str|dict[str,str]]]] = None
     role: Optional[str] = None
 
     def to_dict(self) -> Dict:
@@ -75,15 +75,21 @@ class AssistantMessage(Message):
         if self.tool_calls == None:
             self.tool_calls = message.tool_calls
         elif message.tool_calls != None:
-            for i, tool_call in enumerate(message.tool_calls):
-                self.tool_calls[i].update(tool_call)
+            already_called_tool = [tool_call.id for tool_call in self.tool_calls]
+            for tool_call in message.tool_calls:
+                if tool_call.id is not None and tool_call.id not in already_called_tool:
+                    self.tool_calls.append(tool_call)
+            self.tool_calls[-1].update(tool_call)
     
     @classmethod
     def from_api_response(cls, message: ChatCompletionMessage):
         return cls(
             content=message.content,
             role=message.role,
-            tool_calls=[ToolCall.from_api_response(tool_call) for tool_call in message.tool_calls] if message.tool_calls != None else None
+            tool_calls=[
+                ToolCall.from_api_response(tool_call) 
+                    for tool_call in message.tool_calls
+                ] if message.tool_calls != None else None
         )
 
 @dataclass
